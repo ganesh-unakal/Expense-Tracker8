@@ -1,0 +1,43 @@
+.login{
+    margin: 6rem auto;
+    background-color: cadetblue;
+    max-width: 25rem;
+    box-shadow: 10px 10px dimgray;
+    padding: 1rem;
+    text-align: center;
+    color:azure;
+   border-bottom-right-radius: 25px;
+   
+   
+    
+}
+.login label{
+    display: block;
+   
+}
+
+.login input{
+    border-radius: 5px;
+    width: 13rem;
+    height: 1.1rem;
+}
+
+.button1{
+    position: relative;
+    left: 10rem;
+    top: 5px;
+    border-radius: 8px;
+    border-color: transparent;
+    background-color:darkolivegreen;
+    color: wheat;
+    display: block;
+}
+
+.button2{
+    border-radius: 5px;
+    border-color: transparent;
+    background-color: transparent;
+    position: relative;
+    top: 10px;
+    
+}
