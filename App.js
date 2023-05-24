@@ -1,17 +1,33 @@
+import { Fragment, useContext } from "react";
+import "./App.css";
 
-import { Fragment } from 'react';
-import './App.css';
-import Header from './components/NavBar/Header';
-import Login from './components/login/Login';
+import Login from "./components/login/Login";
+import Home from "./components/pages/Home";
+import { Route, Switch, Redirect } from "react-router-dom";
+import AuthContext from "./components/store/Auth-context";
 
 function App() {
+  const authCntx = useContext(AuthContext);
   return (
-    <Fragment>
+    <Switch>
+      <Route path="/" exact>
+        <Redirect to="/login" />
+      </Route>
 
-    <Header />
-    <Login />
+      <Route path="/login">
+        <Login />
+      </Route>
 
-    </Fragment>
+      {authCntx.isLoggedIn && (
+        <Route path="/home">
+          <Home />
+        </Route>
+      )}
+
+      <Route path="*">
+        <Redirect to='/login' />
+      </Route>
+    </Switch>
   );
 }
 
