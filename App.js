@@ -1,8 +1,9 @@
 import { Fragment, useContext } from "react";
 import "./App.css";
 
+import WelcomePage from './components/pages/WelcomePage'
 import Login from "./components/login/Login";
-import Home from "./components/pages/Home";
+import Profile from "./components/pages/Profile";
 import { Route, Switch, Redirect } from "react-router-dom";
 import AuthContext from "./components/store/Auth-context";
 
@@ -19,10 +20,15 @@ function App() {
       </Route>
 
       {authCntx.isLoggedIn && (
-        <Route path="/home">
-          <Home />
+        <Route path="/welcome" exact>
+          <WelcomePage />
         </Route>
       )}
+
+ {authCntx.isLoggedIn && <Route path='/welcome/profile'>
+  <Profile />
+</Route>}
+
 
       <Route path="*">
         <Redirect to='/login' />
