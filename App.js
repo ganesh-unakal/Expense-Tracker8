@@ -6,6 +6,7 @@ import Login from "./components/login/Login";
 import Profile from "./components/pages/Profile";
 import { Route, Switch, Redirect } from "react-router-dom";
 import AuthContext from "./components/store/Auth-context";
+import ForgetPassword from "./components/pages/ForgetPassword";
 
 function App() {
   const authCntx = useContext(AuthContext);
@@ -28,6 +29,10 @@ function App() {
  {authCntx.isLoggedIn && <Route path='/welcome/profile'>
   <Profile />
 </Route>}
+
+<Route path='/forget'>
+<ForgetPassword />
+</Route>
 
 
       <Route path="*">
