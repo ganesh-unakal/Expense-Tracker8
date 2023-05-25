@@ -11,6 +11,12 @@ const WelcomePage = () => {
   const routeChange = () => {
     history.push("/welcome/profile");
   };
+ 
+  const logoutHandler = () =>{
+    authctx.logout()
+    history.replace('/login')
+  }
+
 
   const varifyEmail = () => {
     fetch(
@@ -60,6 +66,13 @@ const WelcomePage = () => {
         >
           Varify Email
         </button>
+
+        <button style={{
+            backgroundColor: "red",
+            height: "25px",
+            marginTop: "20px",
+            borderRadius: "8px",
+          }} onClick={logoutHandler}>Logout</button>
 
         <p>
           your profile is incomplete.
