@@ -1,6 +1,6 @@
 import AuthContext from "../store/Auth-context";
 import classes from "./Profile.module.css";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 
 const Profile = () => {
   const nameRef = useRef();
@@ -41,10 +41,49 @@ const Profile = () => {
         }
       })
       .then((data) => {
-        console.log("gani", data);
+        console.log(data);
       })
       .catch((err) => console.log(err));
   };
+
+  const gettingData = () => {
+    fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBgkuX71lzEFVeBFr_IbWeurMbYJwus4SI",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ idToken: auth.token }),
+      }
+    )
+      .then((res) => {
+        console.log("gandu kinnya", res);
+        if (res.ok) {
+          return res.json();
+        } else {
+          return res.json().then((data) => {
+            if (data.error.message) {
+              alert(data.error.message);
+            }
+          });
+        }
+      })
+      .then((data) => {
+        console.log("gandu rohny", data);
+        if (data.users[0].displayName) {
+          nameRef.current.value = data.users[0].displayName;
+          urlRef.current.value = data.users[0].photoUrl;
+        } else {
+          nameRef.current.value = "";
+          urlRef.current.value = "";
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(gettingData, []);
 
   return (
     <div>
