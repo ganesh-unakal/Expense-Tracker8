@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState , useCallback} from "react";
 import classes from "./WelcomePage.module.css";
 import { useHistory } from "react-router-dom";
 import AuthContext from "../store/Auth-context";
@@ -9,6 +9,7 @@ const WelcomePage = () => {
   const authctx = useContext(AuthContext);
   const history = useHistory();
   const [items, setItems] = useState([]);
+
 
   const routeChange = () => {
     history.push("/welcome/profile");
@@ -54,6 +55,35 @@ const WelcomePage = () => {
   const saveExpenseDataHandler = (expense) => {
     setItems((prev) => [...prev, expense]);
   };
+
+
+  const getExpense = useCallback(async() =>{
+   const response = await fetch('https://ecommerce-6aa66-default-rtdb.firebaseio.com/expense.json')
+
+    const data = await response.json()
+    console.log('back data', data)
+  
+
+  const loadedExpense = []
+
+  for(const key in data){
+    loadedExpense.push({
+      id: key,
+      amount: data[key].amount,
+      description : data[key].description,
+      category: data[key].category
+    })
+  }
+
+  setItems(loadedExpense)
+},[])
+
+  useEffect(() =>{
+    getExpense()
+  },[getExpense]
+  
+  
+  )
 
   return (
     <div>

@@ -6,7 +6,7 @@ const ExpenseForm = (props) => {
   const inputDesc = useRef();
   const inputCat = useRef();
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
 
     const enteredPrice = inputPrice.current.value;
@@ -19,6 +19,19 @@ const ExpenseForm = (props) => {
       category: enteredCat,
     };
 
+    const response = await fetch(
+      "https://ecommerce-6aa66-default-rtdb.firebaseio.com/expense.json",
+      {
+        method: "POST",
+        body: JSON.stringify(obj),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    console.log("sending data", data);
+
     props.onSaveData(obj);
   };
 
@@ -27,8 +40,10 @@ const ExpenseForm = (props) => {
       <form className={classes.form} onSubmit={submitHandler}>
         <label htmlFor="amount">Amount</label>
         <input type="number" id="amount" ref={inputPrice} required />
+
         <label htmlFor="desc">Description</label>
         <input type="text" id="desc" required ref={inputDesc} />
+
         <label htmlFor="cat">Category</label>
         <select id="cat" ref={inputCat}>
           <option value="food">Food</option>
@@ -36,6 +51,7 @@ const ExpenseForm = (props) => {
           <option value="petrol">Petrol</option>
           <option value="salary">Salary</option>
         </select>
+
         <button>Add Expense</button>
       </form>
     </Fragment>
