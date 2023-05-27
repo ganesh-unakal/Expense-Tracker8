@@ -9,6 +9,7 @@ const WelcomePage = () => {
   const authctx = useContext(AuthContext);
   const history = useHistory();
   const [items, setItems] = useState([]);
+  const [editId, setEditId] = useState(null)
 
 
   const routeChange = () => {
@@ -82,9 +83,22 @@ const WelcomePage = () => {
     getExpense()
   },[getExpense]
   
+ 
   
   )
+  const deleteHandler =(id) =>{
+    console.log('received',id)
+    setItems(prev =>{
+      const updatedExpense = prev.filter(item => item.id !== id)
+      return updatedExpense
+    })
+  }
 
+  
+  const editHandler =(id)=>{
+    console.log('receving edit id in welcome file',id)
+    setEditId(id)
+  }
   return (
     <div>
       <span className={classes.welcome}>
@@ -109,7 +123,7 @@ const WelcomePage = () => {
             marginTop: "20px",
             borderRadius: "8px",
           }}
-          onClick={logoutHandler}
+          onClick={logoutHandler} 
         >
           Logout
         </button>
@@ -119,8 +133,8 @@ const WelcomePage = () => {
           <button onClick={routeChange}>Complete now</button>
         </p>
       </span>
-      <ExpenseForm onSaveData={saveExpenseDataHandler} />
-      <ExpenseList items={items} />
+      <ExpenseForm onSaveData={saveExpenseDataHandler} editingId={editId} items={items}/>
+      <ExpenseList items={items} onDelete={deleteHandler} onEdit={editHandler}/>
     </div>
   );
 };
