@@ -1,44 +1,24 @@
-import { Fragment, useContext } from "react";
-import "./App.css";
-
-import WelcomePage from './components/pages/WelcomePage'
-import Login from "./components/login/Login";
-import Profile from "./components/pages/Profile";
-import { Route, Switch, Redirect } from "react-router-dom";
-import AuthContext from "./components/store/Auth-context";
-import ForgetPassword from "./components/pages/ForgetPassword";
+import { Fragment } from 'react';
+import Counter from './components/Counter';
+import Auth from './components/Auth';
+import Header from './components/Header';
+import UserProfile from './components/UserProfile';
+import { useSelector } from 'react-redux';
 
 function App() {
-  const authCntx = useContext(AuthContext);
+
+  const isLoggedIn = useSelector(state => state.auth.isAuthentication)
+
+
   return (
-    <Switch>
-      <Route path="/" exact>
-        <Redirect to="/login" />
-      </Route>
+    <Fragment>
+      <Header />
+      {!isLoggedIn && <Auth />}
+      {isLoggedIn && <UserProfile />}
 
-      <Route path="/login">
-        <Login />
-      </Route>
+      <Counter />
+    </Fragment>
 
-      {authCntx.isLoggedIn && (
-        <Route path="/welcome" exact>
-          <WelcomePage />
-        </Route>
-      )}
-
- {authCntx.isLoggedIn && <Route path='/welcome/profile'>
-  <Profile />
-</Route>}
-
-<Route path='/forget'>
-<ForgetPassword />
-</Route>
-
-
-      <Route path="*">
-        <Redirect to='/login' />
-      </Route>
-    </Switch>
   );
 }
 
