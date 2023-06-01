@@ -1,23 +1,27 @@
-import { useContext, useEffect, useState , useCallback} from "react";
+import {useState} from "react";
 import classes from "./WelcomePage.module.css";
 import { useHistory } from "react-router-dom";
-import AuthContext from "../store/Auth-context";
+// import AuthContext from "../../store/Auth-context";
 import ExpenseForm from "./ExpenseForm";
 import ExpenseList from "./ExpesneList";
+import { useDispatch ,useSelector} from "react-redux";
+import { authActions } from "../../store/authentication";
 
 const WelcomePage = () => {
-  const authctx = useContext(AuthContext);
+  // const authctx = useContext(AuthContext);
   const history = useHistory();
   const [items, setItems] = useState([]);
-  const [editId, setEditId] = useState(null)
+  const [editItem, setEditItem] = useState(null)
+  const dispatch = useDispatch();
 
+  const token = useSelector(state=>state.authentication.token)
 
   const routeChange = () => {
     history.push("/welcome/profile");
   };
 
   const logoutHandler = () => {
-    authctx.logout();
+    dispatch(authActions.logout())
     history.replace("/login");
   };
 
@@ -31,7 +35,7 @@ const WelcomePage = () => {
         },
         body: JSON.stringify({
           requestType: "VERIFY_EMAIL",
-          idToken: authctx.token,
+          idToken: token,
         }),
       }
     )
@@ -53,51 +57,51 @@ const WelcomePage = () => {
       .catch((err) => console.log(err));
   };
 
-  const saveExpenseDataHandler = (expense) => {
-    setItems((prev) => [...prev, expense]);
-  };
+  // const saveExpenseDataHandler = (expense) => {
+  //   setItems((prev) => [...prev, expense]);
+  // };
 
 
-  const getExpense = useCallback(async() =>{
-   const response = await fetch('https://ecommerce-6aa66-default-rtdb.firebaseio.com/expense.json')
+//   const getExpense = useCallback(async() =>{
+//    const response = await fetch('https://ecommerce-6aa66-default-rtdb.firebaseio.com/expense.json')
 
-    const data = await response.json()
-    console.log('back data', data)
+//     const data = await response.json()
+//     console.log('back data', data)
   
 
-  const loadedExpense = []
+//   const loadedExpense = []
 
-  for(const key in data){
-    loadedExpense.push({
-      id: key,
-      amount: data[key].amount,
-      description : data[key].description,
-      category: data[key].category
-    })
-  }
+//   for(const key in data){
+//     loadedExpense.push({
+//       id: key,
+//       amount: data[key].amount,
+//       description : data[key].description,
+//       category: data[key].category
+//     })
+//   }
 
-  setItems(loadedExpense)
-},[])
+//   setItems(loadedExpense)
+// },[])
 
-  useEffect(() =>{
-    getExpense()
-  },[getExpense]
+//   useEffect(() =>{
+//     getExpense()
+//   },[getExpense]
   
  
   
-  )
-  const deleteHandler =(id) =>{
-    console.log('received',id)
-    setItems(prev =>{
-      const updatedExpense = prev.filter(item => item.id !== id)
-      return updatedExpense
-    })
-  }
+  //)
+  // const deleteHandler =(id) =>{
+  //   console.log('received',id)
+  //   setItems(prev =>{
+  //     const updatedExpense = prev.filter(item => item.id !== id)
+  //     return updatedExpense
+  //   })
+  // }
 
   
-  const editHandler =(id)=>{
-    console.log('receving edit id in welcome file',id)
-    setEditId(id)
+  const editHandler =(item)=>{
+    console.log('receving edit id in welcome file',item)
+    console.log(setEditItem(item))
   }
   return (
     <div>
@@ -133,8 +137,8 @@ const WelcomePage = () => {
           <button onClick={routeChange}>Complete now</button>
         </p>
       </span>
-      <ExpenseForm onSaveData={saveExpenseDataHandler} editingId={editId} items={items}/>
-      <ExpenseList items={items} onDelete={deleteHandler} onEdit={editHandler}/>
+      <ExpenseForm  editItem={editItem} />
+      <ExpenseList  onEdit={editHandler}/>
     </div>
   );
 };

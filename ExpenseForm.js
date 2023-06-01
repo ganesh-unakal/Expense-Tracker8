@@ -1,28 +1,32 @@
 import React, { Fragment, useRef, useEffect } from "react";
 import classes from "./ExpenseForm.module.css";
+import { useState } from "react";
+import expense from "../../store/expense";
 
 
 const ExpenseForm = (props) => {
   const inputPrice = useRef();
   const inputDesc = useRef();
   const inputCat = useRef();
+  const [receivedExpense, setReceivedExpense] = useState([])
+
 
   useEffect(() => {
-    if (props.editingId) {
-      console.log('eeeeeeeeeee',props.editingId)
-      // Find the expense item with the editingId
-      const editingExpense = props.items.find(
-        (item) => item.id === props.editingId.id
-      );
-         
-      // If the expense is found, prefill the form fields
-      if (editingExpense) {
-        inputPrice.current.value = editingExpense.amount;
-        inputDesc.current.value = editingExpense.description;
-        inputCat.current.value = editingExpense.category;
-      }
+    // if (props.editingId) {
+    //   console.log('eeeeeeeeeee',props.editingId)
+    //   // Find the expense item with the editingId
+    //   const editingExpense = props.items.find(
+    //     (item) => item.id === props.editingId.id
+    //   );
+
+    // If the expense is found, prefill the form fields
+    if (props.editItem) {
+      inputPrice.current.value = props.editItem.amount;
+      inputDesc.current.value = props.editItem.description;
+      inputCat.current.value = props.editItem.category;
     }
-  }, [props.editingId, props.items]);
+  }, [props.editItem])
+
 
 
 
@@ -71,8 +75,10 @@ const ExpenseForm = (props) => {
     );
     const data = await response.json();
     console.log("sending data", data);
-
-    props.onSaveData(obj);
+    //setReceivedExpense([...receivedExpense, obj])
+    console.log('aaaaaaaaaaa', receivedExpense)
+    window.location.reload();
+    // props.onSaveData(obj);
   };
 
   return (

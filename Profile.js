@@ -1,11 +1,13 @@
-import AuthContext from "../store/Auth-context";
+import { useSelector } from "react-redux";
+// import AuthContext from "../../store/Auth-context";
 import classes from "./Profile.module.css";
-import { useContext, useEffect, useRef } from "react";
+import {useEffect, useRef } from "react";
 
 const Profile = () => {
   const nameRef = useRef();
   const urlRef = useRef();
-  const auth = useContext(AuthContext);
+  // const auth = useContext(AuthContext);
+  const token = useSelector(state => state.authentication.token)
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -21,7 +23,7 @@ const Profile = () => {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
-          idToken: auth.token,
+          idToken: token,
           returnSecureToken: true,
           displayName: enteredName,
           photoUrl: enteredUrl,
@@ -54,7 +56,7 @@ const Profile = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ idToken: auth.token }),
+        body: JSON.stringify({ idToken: token }),
       }
     )
       .then((res) => {
