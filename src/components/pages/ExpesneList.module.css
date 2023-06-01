@@ -1,0 +1,71 @@
+.ul {
+  background-color: rgb(0, 195, 255);
+  margin: 100px 100px;
+  /* text-align: center; */
+  list-style: none;
+  padding: 20px;
+  border-radius: 12px;
+  width: 60%;
+  margin-left: 15%;
+}
+
+.ul li {
+  display: flex;
+  background-color: white;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid black;
+  padding: 5px;
+  margin: 20px;
+  border-radius: 12px;
+  color: black;
+  font-weight: bold;
+}
+
+.actions {
+  /* background-color: red; */
+  padding: 5px;
+  width: 25%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions .edit {
+  background-color: greenyellow;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  font-weight: bold;
+}
+
+.actions .delete {
+  background-color: rgb(241, 135, 135);
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  font-weight: bold;
+}
+
+.actions .edit:hover {
+  background-color: rgb(0, 255, 0);
+}
+
+.actions .delete:hover {
+  background-color: lightblue;
+}
+
+.button1 {
+  background-color: rgba(255, 255, 0, 0.937);
+  border-radius: 5px;
+  padding: 0px 8px 0px 8px;
+  font-weight: bold;
+
+}
+
+.button2 {
+  background-color: deeppink;
+  border-radius: 5px;
+  font-weight: bold;
+}
