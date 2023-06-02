@@ -1,47 +1,18 @@
-import { Fragment, useContext } from "react";
-import "./App.css";
+import Cart from './components/Cart/Cart';
+import Layout from './components/Layout/Layout';
+import Products from './components/Shop/Products';
+import { useSelector } from 'react-redux';
 
-import WelcomePage from './components/pages/WelcomePage'
-import Login from "./components/login/Login";
-import Profile from "./components/pages/Profile";
-import { Route, Switch, Redirect } from "react-router-dom";
 
-import ForgetPassword from "./components/pages/ForgetPassword";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 function App() {
-  // const authCntx = useContext(AuthContext);
 
-  const isLoggedIn = useSelector(state=>state.authentication.isAuthenticated)
+const ShowCart = useSelector(state => state.ui.cartIsVisible)
+
   return (
-    <Switch>
-      <Route path="/" exact>
-        <Redirect to="/login" />
-      </Route>
-
-      <Route path="/login">
-        <Login />
-      </Route>
-
-      {isLoggedIn && (
-        <Route path="/welcome" exact>
-          <WelcomePage />
-        </Route>
-      )}
-
- {isLoggedIn && <Route path='/welcome/profile'>
-  <Profile />
-</Route>}
-
-<Route path='/forget' exact>
-<ForgetPassword />
-</Route>
-
-
-      <Route path="*">
-        <Redirect to='/login' />
-      </Route>
-    </Switch>
+    <Layout>
+      {ShowCart && <Cart /> }
+      <Products />
+    </Layout>
   );
 }
 
