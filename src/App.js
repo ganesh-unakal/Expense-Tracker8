@@ -1,47 +1,83 @@
-import { Fragment, useContext } from "react";
-import "./App.css";
+import Cart from './components/Cart/Cart';
+import Layout from './components/Layout/Layout';
+import Products from './components/Shop/Products';
+import { useSelector,useDispatch } from 'react-redux';
+import  {Fragment, useEffect} from 'react'
+import { uiActions } from './store/ui-slice';
+import Notification from './components/UI/Notification';
 
-import WelcomePage from './components/pages/WelcomePage'
-import Login from "./components/login/Login";
-import Profile from "./components/pages/Profile";
-import { Route, Switch, Redirect } from "react-router-dom";
+let initial = true;
 
-import ForgetPassword from "./components/pages/ForgetPassword";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+
 function App() {
-  // const authCntx = useContext(AuthContext);
 
-  const isLoggedIn = useSelector(state => state.authentication.isAuthenticated)
+const ShowCart = useSelector(state => state.ui.cartIsVisible)
+const cart = useSelector(state=>state.cart)
+const dispatch = useDispatch()
+const notification = useSelector(state=> state.ui.notification)
+
+ useEffect(()=>{
+  const sendCartData = async() => {
+    dispatch(uiActions.showNotification({
+      status: 'pending',
+      title: 'sending...',
+      message: 'sending cart data!'
+    }))
+  
+  
+    const response = await fetch("https://cartecommarce-default-rtdb.firebaseio.com/cart.json",
+  {
+    method : 'PUT',
+    body: JSON.stringify(cart),
+  });
+
+  
+  if(!response.ok) {
+    throw new Error('sending cart data failed')
+  }
+
+
+    dispatch(uiActions.showNotification({
+    status: 'success',
+    title: 'Success',
+    message: 'sending cart data successfully!'
+  }))
+  }
+
+
+  
+if(initial){
+  initial = false;
+  return;
+}
+ 
+
+  sendCartData().catch((err) =>{
+    dispatch(uiActions.showNotification({
+      status: 'error',
+      title: 'Error...',
+      message: 'sending cart data is failed!'
+    }))
+  });
+
+
+
+ },[cart, dispatch ])
+
   return (
-    <Switch>
-      <Route path="/" exact>
-        <Redirect to="/login" />
-      </Route>
-
-      <Route path="/login">
-        <Login />
-      </Route>
-
-      {isLoggedIn && (
-        <Route path="/welcome" exact>
-          <WelcomePage />
-        </Route>
+    <Fragment>
+      {notification && 
+      (<Notification 
+        status={notification.status} 
+        title={notification.title} 
+        message={notification.message}
+        />
       )}
-
-      {isLoggedIn && <Route path='/welcome/profile'>
-        <Profile />
-      </Route>}
-
-      <Route path='/forget' exact>
-        <ForgetPassword />
-      </Route>
-
-
-      <Route path="*">
-        <Redirect to='/login' />
-      </Route>
-    </Switch>
+    <Layout>
+      {ShowCart && <Cart /> }
+      <Products />
+    </Layout>
+    </Fragment>
   );
 }
 
